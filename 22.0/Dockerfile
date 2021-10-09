@@ -18,7 +18,7 @@ RUN mkdir -p ${BERKELEYDB_PREFIX}
 WORKDIR /${BERKELEYDB_VERSION}/build_unix
 
 RUN ../dist/configure --enable-cxx --disable-shared --with-pic --prefix=${BERKELEYDB_PREFIX}
-RUN make -j4
+RUN make -j`nproc`
 RUN make install
 RUN rm -rf ${BERKELEYDB_PREFIX}/docs
 
@@ -66,7 +66,7 @@ RUN ./configure LDFLAGS=-L`ls -d /opt/db*`/lib/ CPPFLAGS=-I`ls -d /opt/db*`/incl
     --with-utils \
     --with-libs \
     --with-daemon
-RUN make -j4
+RUN make -j`nproc`
 RUN make install
 RUN strip ${BITCOIN_PREFIX}/bin/bitcoin-cli
 RUN strip ${BITCOIN_PREFIX}/bin/bitcoin-tx
@@ -100,6 +100,6 @@ EXPOSE 8332 8333 18332 18333 18443 18444 38333 38332
 
 ENTRYPOINT ["/entrypoint.sh"]
 
-RUN bitcoind -version | grep "Bitcoin Core Daemon version v${BITCOIN_VERSION}"
+RUN bitcoind -version | grep "Bitcoin Core version v${BITCOIN_VERSION}"
 
 CMD ["bitcoind"]

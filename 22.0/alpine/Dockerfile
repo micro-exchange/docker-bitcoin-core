@@ -18,7 +18,7 @@ RUN mkdir -p ${BERKELEYDB_PREFIX}
 WORKDIR /${BERKELEYDB_VERSION}/build_unix
 
 RUN ../dist/configure --enable-cxx --disable-shared --with-pic --prefix=${BERKELEYDB_PREFIX}
-RUN make -j4
+RUN make -j`nproc`
 RUN make install
 RUN rm -rf ${BERKELEYDB_PREFIX}/docs
 
@@ -41,16 +41,6 @@ RUN apk --no-cache add libtool
 RUN apk --no-cache add linux-headers
 RUN apk --no-cache add zeromq-dev
 RUN apk --no-cache add git
-RUN set -ex \
-  && for key in \
-    90C8019E36C2E964 \
-  ; do \
-    gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "$key" || \
-    gpg --batch --keyserver pgp.mit.edu --recv-keys "$key" || \
-    gpg --batch --keyserver keyserver.pgp.com --recv-keys "$key" || \
-    gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys "$key" || \
-    gpg --batch --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$key" ; \
-  done
 
 ENV BITCOIN_VERSION=22.0
 ENV BITCOIN_PREFIX=/opt/bitcoin-${BITCOIN_VERSION}
@@ -75,7 +65,7 @@ RUN ./configure LDFLAGS=-L`ls -d /opt/db*`/lib/ CPPFLAGS=-I`ls -d /opt/db*`/incl
     --with-utils \
     --with-libs \
     --with-daemon
-RUN make -j4
+RUN make -j`nproc`
 RUN make install
 RUN strip ${BITCOIN_PREFIX}/bin/bitcoin-cli
 RUN strip ${BITCOIN_PREFIX}/bin/bitcoin-tx
@@ -106,7 +96,7 @@ COPY docker-entrypoint.sh /entrypoint.sh
 
 VOLUME ["/home/bitcoin/.bitcoin"]
 
-EXPOSE 8332 8333 18332 18333 18444
+EXPOSE 8332 8333 18332 18333 18443 18444 38333 38332
 
 ENTRYPOINT ["/entrypoint.sh"]
 

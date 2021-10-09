@@ -12,7 +12,9 @@ A Bitcoin Core docker image.
 **Picking the right tag**
 
 - `microexchange/bitcoin-core:latest`: points to the latest stable release available of Bitcoin Core. Use this only if you know what you're doing as upgrading Bitcoin Core blindly is a risky procedure.
+- `microexchange/bitcoin-core:alpine`: same as above but using the Alpine Linux distribution (a resource efficient Linux distribution with security in mind, but not officially supported by the Bitcoin Core team — use at your own risk).
 - `microexchange/bitcoin-core:<version>`: based on a Ubuntu image, points to a specific version branch or release of Bitcoin Core. Uses the pre-compiled binaries which are fully tested by the Bitcoin Core team.
+- `microexchange/bitcoin-core:<version>-alpine`: same as above but using the Alpine Linux distribution.
 
 ## What is Bitcoin Core?
 
