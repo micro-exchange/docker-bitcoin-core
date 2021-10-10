@@ -22,7 +22,7 @@ RUN make -j`nproc`
 RUN make install
 RUN rm -rf ${BERKELEYDB_PREFIX}/docs
 
-# Build stage for Ravencoin Core
+# Build stage for Bitcoin Core
 FROM ubuntu as bitcoin-core
 
 RUN apt-get update
@@ -97,6 +97,8 @@ COPY docker-entrypoint.sh /entrypoint.sh
 VOLUME ["/home/bitcoin/.bitcoin"]
 
 EXPOSE 8332 8333 18332 18333 18443 18444 38333 38332
+
+RUN ["chmod", "+x", "/entrypoint.sh"]
 
 ENTRYPOINT ["/entrypoint.sh"]
 
